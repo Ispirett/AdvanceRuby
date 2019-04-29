@@ -27,9 +27,7 @@ def bubble_sort_by arr
 end
 
 
-
-
-
+# test variables
 arr = [2, 3, 4, 65, 87, 9,1,6,767,43,2,32,54,6,575,645654,5]
 str_arr = ["hi","hello","hey"]
 
