@@ -18,23 +18,29 @@ end
 def bubble_sort_by arr
       for i in (0...(arr.length))
       for e in (0...(arr.length))
-        if yield(arr[e], arr[i]) > 0
-          arr[i], arr[e] = arr[e], arr[i]
+        if block_given?
+          if yield(arr[e], arr[i]) > 0  
+            arr[i], arr[e] = arr[e], arr[i]     
+          end
+        else 
+          if arr[e].length > arr[i].length   
+            arr[i], arr[e] = arr[e], arr[i]     
+          end
         end
       end
-    end
-    p arr
+    end 
+     arr
 end
 
 
-# test variables
+
 arr = [2, 3, 4, 65, 87, 9,1,6,767,43,2,32,54,6,575,645654,5]
 str_arr = ["hi","hello","hey"]
 
-bubble_sort(arr) # [1, 2, 2, 3, 4, 5, 6, 6, 9, 32, 43, 54, 65, 87, 575, 767, 645654]
-p arr 
+bubble_sort(arr)
 
-bubble_sort_by(str_arr) do |left, right| # ["hi", "hey", "hello"]
- left.length - right.length
+bubble_sort_by(str_arr) do |l ,r|
+  l.length - r.length
 end
 
+bubble_sort_by(str_arr) 
