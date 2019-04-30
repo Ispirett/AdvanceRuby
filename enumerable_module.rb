@@ -20,13 +20,24 @@ module Enumerable
     end
   end
 
-  def my_all? &block
-    self.my_each do |i|
-    return yield i
-
-
+  def my_all? 
+    return true unless block_given?
+    if self.is_a? Hash
+        self.my_each { |k, v| return false if !yield k, v }
+    else
+        self.my_each { |el| return false if !yield el }
     end
-    
+    true
+  end
+
+  def my_any? 
+    return true unless block_given?
+        if self.is_a? Hash
+            self.my_each { |k, v| return true if yield k, v }
+        else
+            self.my_each { |el| return true if yield el }
+        end
+        false
   end
 
 
@@ -37,9 +48,10 @@ end
 
  arr = [2,3,4, 4, 34, 6, 7, 5, 3,2 ]
  arr2 = ["212","@1212", "99"]
-#arr.my_each_with_index { |e, i| puts  e, " index: #{i}"}
-#arr.my_each 
 
-#arr.my_select { | i | puts i if i <= 2}
+a = {
+  t: 2,
+  b: 4,
+}
 
-arr2.my_all? { |i| puts i.size === 2}
+puts arr2.my_any? { |i|  i.size == 4}
