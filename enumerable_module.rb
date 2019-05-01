@@ -9,7 +9,7 @@ module Enumerable
   def my_each_with_index &block
     i = 0
     for e in self
-      yield e, i
+      yield(e, i) if block_given?
       i+=1
       end
   end
@@ -21,7 +21,7 @@ module Enumerable
   end
 
   def my_all? 
-    return true unless block_given?
+    return true if !block_given?
     if self.is_a? Hash
         self.my_each { |k, v| return false if !yield k, v }
     else
@@ -31,7 +31,7 @@ module Enumerable
   end
 
   def my_any? 
-    return true unless block_given?
+    return true if !block_given?
         if self.is_a? Hash
             self.my_each { |k, v| return true if yield k, v }
         else
@@ -41,17 +41,45 @@ module Enumerable
   end
 
 
+  def my_none?
+    return false unless block_given?
+    if self.class == Hash
+        self.my_each do |k, v| 
+          return false if yield k, v 
+        end
+    else
+        self.my_each do |el| 
+          return false if yield el 
+        end
+    end
+    true
+  end
+
+  def my_count?
+    return self.length unless block_given?
+    count = 0
+    self.my_each { |e| count += 1 if yield e }
+    count
+  end
+
+  def my_map
+   
+   new_arr = Array.new
+   self.my_each { |e| new_arr.push(yield e) if block_given?}
+   new_arr 
+  end
 end
 
 
 
 
- arr = [2,3,4, 4, 34, 6, 7, 5, 3,2 ]
+ arr  = [2,3,4, 4, 8, 6, 7, 5, 3,2, 8 ]
  arr2 = ["212","@1212", "99"]
-
-a = {
+ test = [2,3,4,5,3,4,6,7]
+  a = {
   t: 2,
   b: 4,
-}
+ }
 
-puts arr2.my_any? { |i|  i.size == 4}
+puts arr2.my_map {|i| i * 2 }
+
